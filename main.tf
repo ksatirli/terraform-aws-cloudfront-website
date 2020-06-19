@@ -154,6 +154,8 @@ resource "aws_cloudfront_distribution" "this" {
     minimum_protocol_version = var.cloudfront_minimum_protocol_version
     ssl_support_method       = var.cloudfront_ssl_support_method
   }
+
+  // TODO: add `depends_on` for 0.13
 }
 
 resource "aws_route53_record" "this" {
