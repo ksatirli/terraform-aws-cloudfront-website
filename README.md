@@ -21,7 +21,7 @@
 
 ## Requirements
 
-This module requires Terraform version `0.13.0` or newer.
+This module requires Terraform version `0.12.0` or newer.
 
 ## Dependencies
 
