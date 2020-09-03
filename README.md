@@ -40,7 +40,7 @@ module "cloudfront_website" {
   }
 
   source  = "operatehappy/cloudfront-website/aws"
-  version = "0.5.1"
+  version = "0.6.0"
 
   domain_name = "example.com"
   alternate_domain_names = [

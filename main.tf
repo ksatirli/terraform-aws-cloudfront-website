@@ -4,7 +4,7 @@ module "acm_certificate" {
   }
 
   source  = "operatehappy/acm-certificate/aws"
-  version = "1.0.1"
+  version = "1.1.0"
 
   domain_name            = var.domain_name
   alternate_domain_names = var.alternate_domain_names
@@ -21,7 +21,7 @@ module "s3_bucket" {
   }
 
   source  = "operatehappy/s3-bucket/aws"
-  version = "1.1.4"
+  version = "1.2.0"
 
   name             = var.s3_bucket_name
   use_prefix       = var.s3_use_prefix
