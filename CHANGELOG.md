@@ -1,3 +1,7 @@
+# 0.6.0 (2020-09-15)
+
+* Updates provider version (#4) ([1b373b5](https://github.com/operatehappy/terraform-aws-cloudfront-website/commit/1b373b5)), closes [#4](https://github.com/operatehappy/terraform-aws-cloudfront-website/issues/4)
+
 ## 0.5.1 (2020-06-24)
 
 * updates ACM module from `1.0.0` to `1.0.1` ([d2b5b21](https://github.com/operatehappy/terraform-aws-cloudfront-website/commit/d2b5b21))
