@@ -4,7 +4,7 @@ module "acm_certificate" {
   }
 
   source  = "operatehappy/acm-certificate/aws"
-  version = "1.0.1"
+  version = "1.2.0"
 
   domain_name            = var.domain_name
   alternate_domain_names = var.alternate_domain_names
@@ -16,12 +16,8 @@ module "acm_certificate" {
 }
 
 module "s3_bucket" {
-  providers = {
-    aws = aws.distribution
-  }
-
   source  = "operatehappy/s3-bucket/aws"
-  version = "1.1.4"
+  version = "1.2.0"
 
   name             = var.s3_bucket_name
   use_prefix       = var.s3_use_prefix
@@ -34,14 +30,10 @@ module "s3_bucket" {
 }
 
 resource "aws_cloudfront_origin_access_identity" "this" {
-  provider = aws.distribution
-
   comment = local.cloudfront_origin_access_identity_comment
 }
 
 data "aws_iam_policy_document" "this" {
-  provider = aws.distribution
-
   statement {
     effect    = "Allow"
     actions   = ["s3:GetObject"]
@@ -57,15 +49,11 @@ data "aws_iam_policy_document" "this" {
 // NOTE: Bucket Policies could also be set by passing the `policy` attribute to the `s3_bucket` Module.
 // NOTE: This might result in a race-condition as the Distribution is dependent on output from `s3_bucket`.
 resource "aws_s3_bucket_policy" "this" {
-  provider = aws.distribution
-
   bucket = module.s3_bucket.id
   policy = data.aws_iam_policy_document.this.json
 }
 
 resource "aws_cloudfront_distribution" "this" {
-  provider = aws.global
-
   aliases = length(local.concatenated_records) > 0 ? local.concatenated_records : [var.domain_name]
   comment = var.cloudfront_comment
 
@@ -155,12 +143,10 @@ resource "aws_cloudfront_distribution" "this" {
     ssl_support_method       = var.cloudfront_ssl_support_method
   }
 
-  // TODO: add `depends_on` for 0.13
+  depends_on = [module.acm_certificate]
 }
 
 resource "aws_route53_record" "this" {
-  provider = aws.global
-
   count = length(local.concatenated_records)
 
   zone_id = var.route53_zone_id

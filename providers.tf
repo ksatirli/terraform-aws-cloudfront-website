@@ -1,7 +1,4 @@
 provider "aws" {
-  alias = "global"
-}
-
-provider "aws" {
-  alias = "distribution"
+  alias  = "global"
+  region = "us-east-1"
 }

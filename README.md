@@ -21,7 +21,7 @@
 
 ## Requirements
 
-This module requires Terraform version `0.12.0` or newer.
+This module requires Terraform version `0.13.0` or newer.
 
 ## Dependencies
 
@@ -40,7 +40,7 @@ module "cloudfront_website" {
   }
 
   source  = "operatehappy/cloudfront-website/aws"
-  version = "0.5.1"
+  version = "0.6.0"
 
   domain_name = "example.com"
   alternate_domain_names = [
@@ -92,7 +92,6 @@ Then, fetch the module from the [Terraform Registry](https://registry.terraform.
 | cloudfront_ssl_support_method | HTTPs request serving method for CloudFront Distribution | `string` | `"sni-only"` |
 | cloudfront_tags | Mapping of Tags of CloudFront Distribution | `map(string)` | `{}` |
 | cloudfront_use_default_tags | Toggle to enable creation of default tags for CloudFront Distribution, containing Terraform Workspace identifier | `bool` | `true` |
-| region | Region of S3 Bucket | `string` | `null` |
 | s3_create_readme | Toggle creation of `README.md` in root of S3 Bucket | `bool` | `false` |
 | s3_force_destroy | Toggle to enable force-destruction of S3 Bucket | `bool` | `false` |
 | s3_policy | Policy (JSON) Document of S3 Bucket | `string` | `null` |

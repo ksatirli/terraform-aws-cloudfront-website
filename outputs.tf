@@ -70,7 +70,7 @@ output "distribution_status" {
 }
 
 output "distribution_active_trusted_signers" {
-  value       = aws_cloudfront_distribution.this.active_trusted_signers
+  value       = aws_cloudfront_distribution.this.trusted_signers
   description = "Key Pair IDs that are able to sign private URLs for the CloudFront Distribution"
 }
 
