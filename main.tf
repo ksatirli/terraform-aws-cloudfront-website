@@ -4,7 +4,7 @@ module "acm_certificate" {
   }
 
   source  = "operatehappy/acm-certificate/aws"
-  version = "1.1.1"
+  version = "1.2.0"
 
   domain_name            = var.domain_name
   alternate_domain_names = var.alternate_domain_names
