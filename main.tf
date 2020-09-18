@@ -57,23 +57,23 @@ resource "aws_cloudfront_distribution" "this" {
   aliases = length(local.concatenated_records) > 0 ? local.concatenated_records : [var.domain_name]
   comment = var.cloudfront_comment
 
-  // TODO: multiples allowed
-  //  custom_error_response {
-  //    error_code = 0
-  //  }
+  # TODO: multiples allowed
+  #  custom_error_response {
+  #    error_code = 0
+  #  }
 
-  // TODO: turn into variable
-  //  dynamic "default_cache_behavior" {
-  //    for_each = var.default_cache_behavior
-  //
-  //    content {
-  //      allowed_methods = lookup(default_cache_behavior.value, "allowed_methods", null)
-  //      cached_methods = lookup(default_cache_behavior.value, "cached_methods", null)
-  //      target_origin_id = lookup(default_cache_behavior.value, "target_origin_id", null)
-  //      expose_headers  = lookup(default_cache_behavior.value, "expose_headers", null)
-  //      max_age_seconds = lookup(default_cache_behavior.value, "max_age_seconds", null)
-  //    }
-  //  }
+  # TODO: turn into variable
+  #  dynamic "default_cache_behavior" {
+  #    for_each = var.default_cache_behavior
+  #
+  #    content {
+  #      allowed_methods = lookup(default_cache_behavior.value, "allowed_methods", null)
+  #      cached_methods = lookup(default_cache_behavior.value, "cached_methods", null)
+  #      target_origin_id = lookup(default_cache_behavior.value, "target_origin_id", null)
+  #      expose_headers  = lookup(default_cache_behavior.value, "expose_headers", null)
+  #      max_age_seconds = lookup(default_cache_behavior.value, "max_age_seconds", null)
+  #    }
+  #  }
 
   default_cache_behavior {
     target_origin_id = local.s3_origin_id
@@ -101,11 +101,11 @@ resource "aws_cloudfront_distribution" "this" {
   is_ipv6_enabled = var.cloudfront_is_ipv6_enabled
   http_version    = var.cloudfront_http_version
 
-  //  logging_config {
-  //    include_cookies = false
-  //    bucket          = "mylogs.s3.amazonaws.com"
-  //    prefix          = "myprefix"
-  //  }
+  #  logging_config {
+  #    include_cookies = false
+  #    bucket          = "mylogs.s3.amazonaws.com"
+  #    prefix          = "myprefix"
+  #  }
 
   origin {
     domain_name = module.s3_bucket.bucket_regional_domain_name
@@ -116,16 +116,16 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
-  // TODO: multiples allowed
-  //  origin_group {
-  //    origin_id = ""
-  //    failover_criteria {
-  //      status_codes = []
-  //    }
-  //    member {
-  //      origin_id = ""
-  //    }
-  //  }
+  # TODO: multiples allowed
+  #  origin_group {
+  #    origin_id = ""
+  #    failover_criteria {
+  #      status_codes = []
+  #    }
+  #    member {
+  #      origin_id = ""
+  #    }
+  #  }
 
   price_class = var.cloudfront_price_class
 
