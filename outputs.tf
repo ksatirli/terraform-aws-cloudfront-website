@@ -53,7 +53,7 @@ output "origin_access_identity_s3_canonical_user_id" {
   description = "Canonical S3 User ID of the Origin Access Identity"
 }
 
-// TODO: cloudfront outputs
+# TODO: cloudfront outputs
 output "distribution_id" {
   value       = aws_cloudfront_distribution.this.id
   description = "Identifier for the CloudFront Distribution"
@@ -99,10 +99,10 @@ output "distribution_hosted_zone_id" {
   description = "Route 53 Zone ID for the CloudFront Distribution"
 }
 
-//output "policy_document_json" {
-//  value       = aws_iam_policy_document.this.json
-//  description = "IAM Policy Document for S3 Bucket Policy (in JSON Format)"
-//}
+#output "policy_document_json" {
+#  value       = aws_iam_policy_document.this.json
+#  description = "IAM Policy Document for S3 Bucket Policy (in JSON Format)"
+#}
 
 output "route53_record_names" {
   value       = aws_route53_record.this[*].name
