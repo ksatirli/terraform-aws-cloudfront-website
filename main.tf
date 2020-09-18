@@ -46,8 +46,8 @@ data "aws_iam_policy_document" "this" {
   }
 }
 
-// NOTE: Bucket Policies could also be set by passing the `policy` attribute to the `s3_bucket` Module.
-// NOTE: This might result in a race-condition as the Distribution is dependent on output from `s3_bucket`.
+# NOTE: Bucket Policies could also be set by passing the `policy` attribute to the `s3_bucket` Module.
+# NOTE: This might result in a race-condition as the Distribution is dependent on output from `s3_bucket`.
 resource "aws_s3_bucket_policy" "this" {
   bucket = module.s3_bucket.id
   policy = data.aws_iam_policy_document.this.json

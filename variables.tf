@@ -97,7 +97,7 @@ variable "cloudfront_comment" {
   default     = "Terraform-managed resource"
 }
 
-// TODO: turn into variable
+# TODO: turn into variable
 variable "cloudfront_default_cache_behavior" {
   type        = map
   description = "Default cache behavior for CloudFront Distribution"
@@ -152,20 +152,20 @@ locals {
     TerraformWorkspace = terraform.workspace
   }
 
-  // if `use_default_tags` is set to `true`, merge `tags` with `default_tags`
-  // otherwise, use user-supplied `tags` mapping
+  # if `use_default_tags` is set to `true`, merge `tags` with `default_tags`
+  # otherwise, use user-supplied `tags` mapping
   s3_merged_tags         = var.s3_use_default_tags ? merge(var.s3_tags, local.default_tags) : var.s3_tags
   acm_merged_tags        = var.acm_use_default_tags ? merge(var.acm_tags, local.default_tags) : var.acm_tags
   cloudfront_merged_tags = var.cloudfront_use_default_tags ? merge(var.cloudfront_tags, local.default_tags) : var.cloudfront_tags
 
   concatenated_records = concat([var.domain_name], var.alternate_domain_names)
 
-  // if `use_prefix` is set to `true`, set `bucket_name` to `null`
-  // thereby allowing Terraform to set the `bucket_prefix`
+  # if `use_prefix` is set to `true`, set `bucket_name` to `null`
+  # thereby allowing Terraform to set the `bucket_prefix`
   s3_bucket_name = var.s3_use_prefix ? null : var.s3_bucket_name
 
-  // if `use_prefix` is set to `false`, set `bucket_prefix` to `null`
-  // thereby allowing Terraform to set the `bucket_name`
+  # if `use_prefix` is set to `false`, set `bucket_prefix` to `null`
+  # thereby allowing Terraform to set the `bucket_name`
   s3_bucket_prefix = var.s3_use_prefix ? var.s3_bucket_name : null
 
   s3_origin_id = "S3-${var.s3_bucket_name}"
