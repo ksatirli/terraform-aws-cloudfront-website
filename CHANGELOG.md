@@ -1,4 +1,8 @@
-# 0.6.0 (2020-09-15)
+# 0.6.1 (2020-09-18)
+
+* Linting (#5) ([3c7c026](https://github.com/operatehappy/terraform-aws-cloudfront-website/commit/3c7c026)), closes [#5](https://github.com/operatehappy/terraform-aws-cloudfront-website/issues/5)
+
+## 0.6.0 (2020-09-15)
 
 * Updates provider version (#4) ([1b373b5](https://github.com/operatehappy/terraform-aws-cloudfront-website/commit/1b373b5)), closes [#4](https://github.com/operatehappy/terraform-aws-cloudfront-website/issues/4)
 
