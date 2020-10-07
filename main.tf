@@ -1,8 +1,4 @@
 module "acm_certificate" {
-  providers = {
-    aws = aws.global
-  }
-
   source  = "operatehappy/acm-certificate/aws"
   version = "1.2.0"
 
