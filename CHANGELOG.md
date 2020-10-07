@@ -1,3 +1,7 @@
+## <small>0.6.2 (2020-10-07)</small>
+
+* Remove provider blocks (#6) ([183b640](https://github.com/operatehappy/terraform-aws-cloudfront-website/commit/183b640)), closes [#6](https://github.com/operatehappy/terraform-aws-cloudfront-website/issues/6)
+
 # 0.6.1 (2020-09-18)
 
 * Linting (#5) ([3c7c026](https://github.com/operatehappy/terraform-aws-cloudfront-website/commit/3c7c026)), closes [#5](https://github.com/operatehappy/terraform-aws-cloudfront-website/issues/5)
