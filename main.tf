@@ -1,127 +1,92 @@
-module "acm_certificate" {
-  source  = "operatehappy/acm-certificate/aws"
-  version = "1.2.0"
-
-  domain_name            = var.domain_name
-  alternate_domain_names = var.alternate_domain_names
-
-  use_default_tags                    = true
-  tags                                = var.acm_tags
-  enable_certificate_transparency_log = var.acm_enable_certificate_transparency_log
-  route53_zone_id                     = var.route53_zone_id
+# see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket
+resource "aws_s3_bucket" "main" {
+  bucket = var.s3_bucket_name
+  tags   = var.tags
 }
 
-module "s3_bucket" {
-  source  = "operatehappy/s3-bucket/aws"
-  version = "1.2.0"
-
-  name             = var.s3_bucket_name
-  use_prefix       = var.s3_use_prefix
-  policy           = var.s3_policy
-  acl              = "private"
-  use_default_tags = var.s3_use_default_tags
-  tags             = local.s3_merged_tags
-  force_destroy    = var.s3_force_destroy
-  create_readme    = var.s3_create_readme
+# see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl
+resource "aws_s3_bucket_acl" "main" {
+  bucket = aws_s3_bucket.main.id
+  acl    = var.s3_bucket_acl
 }
 
-resource "aws_cloudfront_origin_access_identity" "this" {
-  comment = local.cloudfront_origin_access_identity_comment
+# see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block
+resource "aws_s3_bucket_public_access_block" "main" {
+  bucket = aws_s3_bucket.main.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
-data "aws_iam_policy_document" "this" {
-  statement {
-    effect    = "Allow"
-    actions   = ["s3:GetObject"]
-    resources = ["${module.s3_bucket.arn}/*"]
-
-    principals {
-      type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.this.iam_arn]
-    }
-  }
+# see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone
+data "aws_route53_zone" "main" {
+  name = var.domain_name
 }
 
-# NOTE: Bucket Policies could also be set by passing the `policy` attribute to the `s3_bucket` Module.
-# NOTE: This might result in a race-condition as the Distribution is dependent on output from `s3_bucket`.
-resource "aws_s3_bucket_policy" "this" {
-  bucket = module.s3_bucket.id
-  policy = data.aws_iam_policy_document.this.json
+# see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html#managed-cache-policies-list
+# and https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/cloudfront_cache_policy
+data "aws_cloudfront_cache_policy" "main" {
+  name = var.cloudfront_cache_policy
 }
 
-resource "aws_cloudfront_distribution" "this" {
-  aliases = length(local.concatenated_records) > 0 ? local.concatenated_records : [var.domain_name]
-  comment = var.cloudfront_comment
+# see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-origin-request-policies.html
+# and https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/cloudfront_origin_request_policy
+data "aws_cloudfront_origin_request_policy" "main" {
+  name = var.cloudfront_origin_request_policy
+}
 
-  # TODO: multiples allowed
-  #  custom_error_response {
-  #    error_code = 0
-  #  }
+# see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-response-headers-policies.html
+# and https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/cloudfront_response_headers_policy
+data "aws_cloudfront_response_headers_policy" "main" {
+  name = var.cloudfront_response_headers_policy
+}
 
-  # TODO: turn into variable
-  #  dynamic "default_cache_behavior" {
-  #    for_each = var.default_cache_behavior
-  #
-  #    content {
-  #      allowed_methods = lookup(default_cache_behavior.value, "allowed_methods", null)
-  #      cached_methods = lookup(default_cache_behavior.value, "cached_methods", null)
-  #      target_origin_id = lookup(default_cache_behavior.value, "target_origin_id", null)
-  #      expose_headers  = lookup(default_cache_behavior.value, "expose_headers", null)
-  #      max_age_seconds = lookup(default_cache_behavior.value, "max_age_seconds", null)
-  #    }
-  #  }
+locals {
+  # create list of domain name and alternate domain names
+  aliases      = length(var.alternate_domain_names) > 0 ? concat(var.alternate_domain_names, [var.domain_name]) : [var.domain_name]
+  s3_origin_id = "S3-${aws_s3_bucket.main.id}"
+}
 
+# see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution
+resource "aws_cloudfront_distribution" "main" {
+  aliases = local.aliases
+  comment = "Terraform-managed CloudFront Distribution for ${data.aws_route53_zone.main.name}."
+
+  # see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution#default-cache-behavior-arguments
   default_cache_behavior {
     target_origin_id = local.s3_origin_id
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
-    compress         = true
 
-    forwarded_values {
-      query_string = false
+    allowed_methods = [
+      "GET",
+      "HEAD"
+    ]
 
-      cookies {
-        forward = "none"
-      }
-    }
+    cached_methods = [
+      "GET",
+      "HEAD"
+    ]
 
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 300
-    max_ttl                = 3600
+    cache_policy_id            = data.aws_cloudfront_cache_policy.main.id
+    compress                   = true
+    origin_request_policy_id   = data.aws_cloudfront_origin_request_policy.main.id
+    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.main.id
+    viewer_protocol_policy     = "redirect-to-https"
+    min_ttl                    = 0
+    default_ttl                = 300
+    max_ttl                    = 3600
   }
 
   default_root_object = var.cloudfront_default_root_object
-
-  enabled         = var.cloudfront_enabled
-  is_ipv6_enabled = var.cloudfront_is_ipv6_enabled
-  http_version    = var.cloudfront_http_version
-
-  #  logging_config {
-  #    include_cookies = false
-  #    bucket          = "mylogs.s3.amazonaws.com"
-  #    prefix          = "myprefix"
-  #  }
+  enabled             = var.cloudfront_enabled
+  is_ipv6_enabled     = var.cloudfront_is_ipv6_enabled
+  http_version        = var.cloudfront_http_version
 
   origin {
-    domain_name = module.s3_bucket.bucket_regional_domain_name
+    domain_name = aws_s3_bucket.main.bucket_regional_domain_name
     origin_id   = local.s3_origin_id
-
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.this.cloudfront_access_identity_path
-    }
   }
-
-  # TODO: multiples allowed
-  #  origin_group {
-  #    origin_id = ""
-  #    failover_criteria {
-  #      status_codes = []
-  #    }
-  #    member {
-  #      origin_id = ""
-  #    }
-  #  }
 
   price_class = var.cloudfront_price_class
 
@@ -131,27 +96,66 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
-  tags = local.cloudfront_merged_tags
+  retain_on_delete = var.cloudfront_retain_on_delete
+  tags             = var.tags
 
   viewer_certificate {
-    acm_certificate_arn      = module.acm_certificate.arn
+    acm_certificate_arn      = module.acm_certificate.aws_acm_certificate.id
     minimum_protocol_version = var.cloudfront_minimum_protocol_version
     ssl_support_method       = var.cloudfront_ssl_support_method
   }
-
-  depends_on = [module.acm_certificate]
 }
 
-resource "aws_route53_record" "this" {
-  count = length(local.concatenated_records)
+# see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document
+data "aws_iam_policy_document" "main" {
+  statement {
+    effect = "Allow"
 
-  zone_id = var.route53_zone_id
-  name    = local.concatenated_records[count.index]
+    actions = [
+      "s3:GetObject"
+    ]
+
+    principals {
+      type = "Service"
+
+      identifiers = [
+        "cloudfront.amazonaws.com"
+      ]
+    }
+
+    resources = [
+      "${aws_s3_bucket.main.arn}/*"
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+
+      values = [
+        aws_cloudfront_distribution.main.arn
+      ]
+    }
+  }
+}
+
+# see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy
+resource "aws_s3_bucket_policy" "main" {
+  bucket = aws_s3_bucket.main.id
+  policy = data.aws_iam_policy_document.main.json
+}
+
+# see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record
+resource "aws_route53_record" "main" {
+  # see https://developer.hashicorp.com/terraform/language/meta-arguments/for_each
+  for_each = toset(local.aliases)
+
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = each.value
   type    = "A"
 
   alias {
-    name                   = aws_cloudfront_distribution.this.domain_name
-    zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
+    name                   = aws_cloudfront_distribution.main.domain_name
+    zone_id                = aws_cloudfront_distribution.main.hosted_zone_id
     evaluate_target_health = false
   }
 }
