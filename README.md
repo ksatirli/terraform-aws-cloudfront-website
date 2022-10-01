@@ -2,9 +2,6 @@
 
 > Terraform Module for managing AWS CloudFront Websites
 
-> Warning 
-> This module has reached End-of-Life status. A re-built version will be available via [ksatirli/terraform-aws-cloudfront-website/](https://github.com/ksatirli/terraform-aws-cloudfront-website/).
-
 ## Table of Contents
 
 - [Terraform Module: AWS CloudFront Websites](#terraform-module-aws-cloudfront-websites)
