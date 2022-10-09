@@ -30,20 +30,16 @@ jobs:
 
       - name: Format Terraform code for Module
         run: terraform fmt -check -recursive
-        env:
-          working-directory: "./"
+        working-directory: "./"
 
       - name: Initialize Terraform for Examples
         run: terraform init
-        env:
-          working-directory: "${{ matrix.examples }}"
+        working-directory: "${{ matrix.examples }}"
 
       - name: Format Terraform code for Examples
         run: terraform fmt -check -recursive
-        env:
-          working-directory: "${{ matrix.examples }}"
+        working-directory: "${{ matrix.examples }}"
 
       - name: Validate Terraform code for Examples
         run: terraform validate
-        env:
-          working-directory: "${{ matrix.examples }}"
+        working-directory: "${{ matrix.examples }}"
