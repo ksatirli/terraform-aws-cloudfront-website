@@ -1,9 +1,3 @@
-output "aws_acm_certificate" {
-  description = "Exported Attributes for `module.acm_certificate.aws_acm_certificate`."
-  sensitive   = true
-  value       = module.website.aws_acm_certificate
-}
-
 output "aws_acm_certificate_validation" {
   description = "Exported Attributes for `module.acm_certificate.aws_acm_certificate_validation`."
   value       = module.website.aws_acm_certificate_validation

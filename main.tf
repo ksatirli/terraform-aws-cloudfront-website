@@ -107,7 +107,7 @@ resource "aws_cloudfront_distribution" "main" {
   tags             = var.tags
 
   viewer_certificate {
-    acm_certificate_arn      = module.acm_certificate.aws_acm_certificate.id
+    acm_certificate_arn      = module.acm_certificate.aws_acm_certificate_validation.certificate_arn
     minimum_protocol_version = var.cloudfront_minimum_protocol_version
     ssl_support_method       = var.cloudfront_ssl_support_method
   }
