@@ -55,7 +55,6 @@ For examples, see the [./examples](https://github.com/ksatirli/terraform-aws-clo
 
 | Name | Description |
 |------|-------------|
-| aws_acm_certificate | Exported Attributes for `module.acm_certificate.aws_acm_certificate`. |
 | aws_acm_certificate_validation | Exported Attributes for `module.acm_certificate.aws_acm_certificate_validation`. |
 | aws_cloudfront_distribution | Exported Attributes for `aws_cloudfront_distribution`. |
 | aws_route53_record | Exported Attributes for `aws_route53_record.main`. |
