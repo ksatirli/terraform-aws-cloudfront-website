@@ -46,7 +46,7 @@ For examples, see the [./examples](https://github.com/ksatirli/terraform-aws-clo
 | cloudfront_origin_request_policy | The Identifier for an Origin Request Policy. | `string` | `"Managed-CORS-S3Origin"` | no |
 | cloudfront_price_class | The price class for this distribution. | `string` | `"PriceClass_100"` | no |
 | cloudfront_response_headers_policy | The Identifier for a Response Headers Policy. | `string` | `"Managed-SimpleCORS"` | no |
-| cloudfront_retain_on_delete | Wether to retain (instead of delete) the CloudFront Distribution on `terraform destroy`. | `bool` | `false` | no |
+| cloudfront_retain_on_delete | Whether to retain (instead of delete) the CloudFront Distribution on `terraform destroy`. | `bool` | `false` | no |
 | cloudfront_ssl_support_method | Specifies how you want CloudFront to serve HTTPS requests. | `string` | `"sni-only"` | no |
 | s3_bucket_acl | The canned ACL to apply to the Bucket. | `string` | `"private"` | no |
 | tags | A map of tags to assign to all resources. | `map(string)` | `{}` | no |
