@@ -59,7 +59,7 @@ variable "cloudfront_response_headers_policy" {
 
 variable "cloudfront_retain_on_delete" {
   type        = bool
-  description = "Wether to retain (instead of delete) the CloudFront Distribution on `terraform destroy`."
+  description = "Whether to retain (instead of delete) the CloudFront Distribution on `terraform destroy`."
   default     = false
 }
 
@@ -88,6 +88,7 @@ variable "s3_bucket_name" {
 variable "tags" {
   type        = map(string)
   description = "A map of tags to assign to all resources."
+
   default     = {}
 }
 

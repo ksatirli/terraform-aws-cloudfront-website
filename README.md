@@ -20,7 +20,6 @@ This Terraform Module provisions an S3-backed CloudFront Distribution for HTTP s
 
 ![Terraform Module: AWS CloudFront Websites](https://raw.githubusercontent.com/operatehappy/terraform-aws-cloudfront-website/master/overview.png "Terraform Module: AWS CloudFront Websites")
 
-
 ## Requirements
 
 * Amazon Web Services (AWS) [Account](https://aws.amazon.com/account/)
