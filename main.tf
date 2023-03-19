@@ -43,6 +43,15 @@ data "aws_cloudfront_response_headers_policy" "main" {
   name = var.cloudfront_response_headers_policy
 }
 
+# see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_origin_access_control
+resource "aws_cloudfront_origin_access_control" "main" {
+  name                              = "S3-${aws_s3_bucket.main.id}"
+  description                       = "Terraform-managed Origin Access Control for ${data.aws_route53_zone.main.name}."
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
 locals {
   # create list of domain name and alternate domain names
   aliases      = length(var.alternate_domain_names) > 0 ? concat(var.alternate_domain_names, [var.domain_name]) : [var.domain_name]
@@ -73,9 +82,6 @@ resource "aws_cloudfront_distribution" "main" {
     origin_request_policy_id   = data.aws_cloudfront_origin_request_policy.main.id
     response_headers_policy_id = data.aws_cloudfront_response_headers_policy.main.id
     viewer_protocol_policy     = "redirect-to-https"
-    min_ttl                    = 0
-    default_ttl                = 300
-    max_ttl                    = 3600
   }
 
   default_root_object = var.cloudfront_default_root_object
@@ -84,8 +90,9 @@ resource "aws_cloudfront_distribution" "main" {
   http_version        = var.cloudfront_http_version
 
   origin {
-    domain_name = aws_s3_bucket.main.bucket_regional_domain_name
-    origin_id   = local.s3_origin_id
+    domain_name              = aws_s3_bucket.main.bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.main.id
+    origin_id                = local.s3_origin_id
   }
 
   price_class = var.cloudfront_price_class
