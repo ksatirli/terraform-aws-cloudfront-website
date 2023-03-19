@@ -116,6 +116,8 @@ resource "aws_cloudfront_distribution" "main" {
 # see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document
 data "aws_iam_policy_document" "main" {
   statement {
+    sid = aws_s3_bucket.main.id
+
     effect = "Allow"
 
     actions = [
@@ -131,7 +133,7 @@ data "aws_iam_policy_document" "main" {
     }
 
     resources = [
-      "${aws_s3_bucket.main.arn}/*"
+      "${aws_s3_bucket.main.arn}/*",
     ]
 
     condition {
