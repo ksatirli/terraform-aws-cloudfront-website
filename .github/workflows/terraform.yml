@@ -1,0 +1,45 @@
+---
+name: "Code Quality: Terraform"
+
+on:
+  push:
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+
+    strategy:
+      # see https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast
+      fail-fast: false
+      matrix:
+        examples:
+          - "./examples/basic"
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+          terraform_version: ${{ secrets.TERRAFORM_VERSION }}
+
+      - name: Format Terraform code for Module
+        run: terraform fmt -check -recursive
+        working-directory: "./"
+
+      - name: Initialize Terraform for Examples
+        run: terraform init
+        working-directory: "${{ matrix.examples }}"
+
+      - name: Format Terraform code for Examples
+        run: terraform fmt -check -recursive
+        working-directory: "${{ matrix.examples }}"
+
+      - name: Validate Terraform code for Examples
+        run: terraform validate
+        working-directory: "${{ matrix.examples }}"

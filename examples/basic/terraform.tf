@@ -11,6 +11,13 @@ terraform {
         aws.certificate
       ]
     }
+
+    # The Random Provider is solely used to create a random suffix for the S3 Bucket resource.
+    # see https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 3.4.3, < 4.0.0"
+    }
   }
 
   # see https://developer.hashicorp.com/terraform/language/settings#specifying-a-required-terraform-version

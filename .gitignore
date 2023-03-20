@@ -1,8 +1,4 @@
-### Terraform ###
-# Compiled files
-*.tfstate
-*.tfstate.*.backup
-*.tfstate.backup
-
-# Module directory
-.terraform/
+/examples/*/.envrc
+/examples/*/terraform.tfvars
+/examples/*/terraform.tfstate*
+/examples/*/.terraform.tfstate.lock.info
