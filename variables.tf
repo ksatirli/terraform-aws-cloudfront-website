@@ -75,12 +75,6 @@ variable "domain_name" {
   description = "The Domain Name of the Route53 Zone."
 }
 
-variable "s3_bucket_acl" {
-  type        = string
-  description = "The canned ACL to apply to the Bucket."
-  default     = "private"
-}
-
 variable "s3_bucket_name" {
   type        = string
   description = "The name of the bucket."

@@ -18,11 +18,6 @@ output "aws_s3_bucket" {
   value       = aws_s3_bucket.main
 }
 
-output "aws_s3_bucket_acl" {
-  description = "Exported Attributes for `aws_s3_bucket_acl.main`."
-  value       = aws_s3_bucket_acl.main
-}
-
 output "aws_s3_bucket_public_access_block" {
   description = "Exported Attributes for `aws_s3_bucket_public_access_block.main`."
   value       = aws_s3_bucket_public_access_block.main
