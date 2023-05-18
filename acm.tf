@@ -9,8 +9,8 @@ module "acm_certificate" {
     aws.certificate = aws.certificate
   }
 
-  domain_name            = var.domain_name
-  alternate_domain_names = var.alternate_domain_names
+  domain_name            = local.primary_record
+  alternate_domain_names = var.alternate_subdomain_names
   route53_zone_id        = data.aws_route53_zone.main.id
   tags                   = var.tags
 }

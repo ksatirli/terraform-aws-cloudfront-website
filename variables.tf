@@ -1,6 +1,7 @@
-variable "alternate_domain_names" {
+variable "alternate_subdomain_names" {
   type        = list(string)
-  description = "The Alternate Domain Names to provide to ACM and CloudFront."
+  description = "The Alternate (Sub)-Domain Names to provide to ACM and CloudFront."
+  default     = []
 }
 
 variable "cloudfront_cache_policy" {
@@ -85,6 +86,11 @@ variable "s3_bucket_name" {
   description = "The name of the bucket."
 }
 
+variable "subdomain_name" {
+  type        = string
+  description = "The Subdomain Name of the Route53 Record."
+}
+
 variable "tags" {
   type        = map(string)
   description = "A map of tags to assign to all resources."
@@ -92,3 +98,7 @@ variable "tags" {
   default = {}
 }
 
+locals {
+  # if subdomain isn't set, fall back to primary domain (as was the case with v1.0.0 of this module)
+  primary_record = var.subdomain_name != "" ? "${var.subdomain_name}.${var.domain_name}" : var.domain_name
+}
