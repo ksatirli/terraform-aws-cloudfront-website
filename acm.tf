@@ -1,4 +1,4 @@
-# see https://registry.terraform.io/modules/ksatirli/acm-certificate/aws/2.0.0
+# see https://registry.terraform.io/modules/ksatirli/acm-certificate/aws/2.1.0
 module "acm_certificate" {
   source  = "ksatirli/acm-certificate/aws"
   version = "2.1.0"
