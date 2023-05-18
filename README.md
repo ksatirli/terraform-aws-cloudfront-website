@@ -59,6 +59,7 @@ For examples, see the [./examples](https://github.com/ksatirli/terraform-aws-clo
 | aws_cloudfront_distribution | Exported Attributes for `aws_cloudfront_distribution`. |
 | aws_route53_record | Exported Attributes for `aws_route53_record.main`. |
 | aws_s3_bucket | Exported Attributes for `aws_s3_bucket.main`. |
+| aws_s3_bucket_acl | Exported Attributes for `aws_s3_bucket_acl.main`. |
 | aws_s3_bucket_policy | Exported Attributes for `aws_s3_bucket_policy.main`. |
 | aws_s3_bucket_public_access_block | Exported Attributes for `aws_s3_bucket_public_access_block.main`. |
 <!-- END_TF_DOCS -->
