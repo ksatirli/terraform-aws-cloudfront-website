@@ -55,7 +55,7 @@ locals {
 # see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution
 resource "aws_cloudfront_distribution" "main" {
   aliases = local.aliases
-  comment = "Terraform-managed CloudFront Distribution for ${local.primary_record}.${var.domain_name}."
+  comment = "Terraform-managed CloudFront Distribution for ${local.primary_record}."
 
   # see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution#default-cache-behavior-arguments
   default_cache_behavior {
