@@ -48,7 +48,7 @@ resource "aws_cloudfront_origin_access_control" "main" {
 
 locals {
   # create list of subdomain name and alternate domain names
-  aliases      = length(var.alternate_subdomain_names) > 0 ? concat(var.alternate_subdomain_names, [ local.primary_record ]) : [ local.primary_record]
+  aliases      = length(var.alternate_subdomain_names) > 0 ? concat(var.alternate_subdomain_names, [local.primary_record]) : [local.primary_record]
   s3_origin_id = "S3-${aws_s3_bucket.main.id}"
 }
 
