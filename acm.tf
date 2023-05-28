@@ -1,7 +1,7 @@
-# see https://registry.terraform.io/modules/ksatirli/acm-certificate/aws/2.1.0
+# see https://registry.terraform.io/modules/ksatirli/acm-certificate/aws/2.2.0
 module "acm_certificate" {
   source  = "ksatirli/acm-certificate/aws"
-  version = "2.1.0"
+  version = "2.2.0"
 
   # see https://developer.hashicorp.com/terraform/language/providers/configuration#alias-multiple-provider-configurations
   providers = {

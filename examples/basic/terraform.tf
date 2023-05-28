@@ -4,7 +4,7 @@ terraform {
     # see https://registry.terraform.io/providers/hashicorp/aws/4.67.0/
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 4.67.0, < 5.0.0"
+      version = ">= 4.67.0, < 6.0.0"
 
       # see https://developer.hashicorp.com/terraform/language/providers/configuration#alias-multiple-provider-configurations
       configuration_aliases = [
