@@ -4,12 +4,6 @@ resource "aws_s3_bucket" "main" {
   tags   = var.tags
 }
 
-# see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl
-resource "aws_s3_bucket_acl" "main" {
-  bucket = aws_s3_bucket.main.id
-  acl    = var.s3_bucket_acl
-}
-
 # see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block
 resource "aws_s3_bucket_public_access_block" "main" {
   bucket = aws_s3_bucket.main.id
@@ -53,15 +47,15 @@ resource "aws_cloudfront_origin_access_control" "main" {
 }
 
 locals {
-  # create list of domain name and alternate domain names
-  aliases      = length(var.alternate_domain_names) > 0 ? concat(var.alternate_domain_names, [var.domain_name]) : [var.domain_name]
+  # create list of subdomain name and alternate domain names
+  aliases      = length(var.alternate_subdomain_names) > 0 ? concat(var.alternate_subdomain_names, [local.primary_record]) : [local.primary_record]
   s3_origin_id = "S3-${aws_s3_bucket.main.id}"
 }
 
 # see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution
 resource "aws_cloudfront_distribution" "main" {
   aliases = local.aliases
-  comment = "Terraform-managed CloudFront Distribution for ${data.aws_route53_zone.main.name}."
+  comment = "Terraform-managed CloudFront Distribution for ${local.primary_record}."
 
   # see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution#default-cache-behavior-arguments
   default_cache_behavior {

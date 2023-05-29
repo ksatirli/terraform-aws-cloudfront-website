@@ -27,8 +27,5 @@ module "website" {
 
   s3_bucket_name = "module-test-${random_string.bucket_suffix.id}"
   domain_name    = data.aws_route53_zone.domain.name
-
-  alternate_domain_names = [
-    "www.${data.aws_route53_zone.domain.name}",
-  ]
+  subdomain_name = "www"
 }

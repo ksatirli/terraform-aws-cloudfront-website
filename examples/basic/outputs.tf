@@ -18,11 +18,6 @@ output "aws_s3_bucket" {
   value       = module.website.aws_s3_bucket
 }
 
-output "aws_s3_bucket_acl" {
-  description = "Exported Attributes for `aws_s3_bucket_acl.main`."
-  value       = module.website.aws_s3_bucket_acl
-}
-
 output "aws_s3_bucket_public_access_block" {
   description = "Exported Attributes for `aws_s3_bucket_public_access_block.main`."
   value       = module.website.aws_s3_bucket_public_access_block

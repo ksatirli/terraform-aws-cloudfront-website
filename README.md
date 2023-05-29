@@ -34,9 +34,10 @@ For examples, see the [./examples](https://github.com/ksatirli/terraform-aws-clo
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| alternate_domain_names | The Alternate Domain Names to provide to ACM and CloudFront. | `list(string)` | n/a | yes |
 | domain_name | The Domain Name of the Route53 Zone. | `string` | n/a | yes |
 | s3_bucket_name | The name of the bucket. | `string` | n/a | yes |
+| subdomain_name | The Subdomain Name of the Route53 Record. | `string` | n/a | yes |
+| alternate_subdomain_names | The Alternate (Sub)-Domain Names to provide to ACM and CloudFront. | `list(string)` | `[]` | no |
 | cloudfront_cache_policy | The Identifier for a Cache Policy. | `string` | `"Managed-CachingOptimized"` | no |
 | cloudfront_default_root_object | The object that you want CloudFront to return when an end user requests the root URL. | `string` | `"index.html"` | no |
 | cloudfront_enabled | Whether the distribution is enabled to accept end user requests for content. | `bool` | `true` | no |
@@ -48,7 +49,6 @@ For examples, see the [./examples](https://github.com/ksatirli/terraform-aws-clo
 | cloudfront_response_headers_policy | The Identifier for a Response Headers Policy. | `string` | `"Managed-SimpleCORS"` | no |
 | cloudfront_retain_on_delete | Whether to retain (instead of delete) the CloudFront Distribution on `terraform destroy`. | `bool` | `false` | no |
 | cloudfront_ssl_support_method | Specifies how you want CloudFront to serve HTTPS requests. | `string` | `"sni-only"` | no |
-| s3_bucket_acl | The canned ACL to apply to the Bucket. | `string` | `"private"` | no |
 | tags | A map of tags to assign to all resources. | `map(string)` | `{}` | no |
 
 ### Outputs
@@ -59,7 +59,6 @@ For examples, see the [./examples](https://github.com/ksatirli/terraform-aws-clo
 | aws_cloudfront_distribution | Exported Attributes for `aws_cloudfront_distribution`. |
 | aws_route53_record | Exported Attributes for `aws_route53_record.main`. |
 | aws_s3_bucket | Exported Attributes for `aws_s3_bucket.main`. |
-| aws_s3_bucket_acl | Exported Attributes for `aws_s3_bucket_acl.main`. |
 | aws_s3_bucket_policy | Exported Attributes for `aws_s3_bucket_policy.main`. |
 | aws_s3_bucket_public_access_block | Exported Attributes for `aws_s3_bucket_public_access_block.main`. |
 <!-- END_TF_DOCS -->
