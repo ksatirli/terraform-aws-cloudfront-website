@@ -57,6 +57,19 @@ resource "aws_cloudfront_distribution" "main" {
   aliases = local.aliases
   comment = "Terraform-managed CloudFront Distribution for ${local.primary_record}."
 
+  # see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution#custom-error-response-arguments
+  # and https://developer.hashicorp.com/terraform/language/expressions/dynamic-blocks
+  dynamic "custom_error_response" {
+    for_each = var.cloudfront_custom_error_responses
+
+    content {
+      error_caching_min_ttl = try(custom_error_response.value.error_caching_min_ttl, null)
+      error_code            = custom_error_response.value.error_code
+      response_code         = try(custom_error_response.value.response_code, null)
+      response_page_path    = try(custom_error_response.value.response_page_path, null)
+    }
+  }
+
   # see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution#default-cache-behavior-arguments
   default_cache_behavior {
     target_origin_id = local.s3_origin_id

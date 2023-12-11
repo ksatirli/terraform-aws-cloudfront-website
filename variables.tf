@@ -10,6 +10,25 @@ variable "cloudfront_cache_policy" {
   default     = "Managed-CachingOptimized"
 }
 
+variable "cloudfront_custom_error_responses" {
+  type = list(object({
+    error_caching_min_ttl = optional(number)
+    error_code            = number
+    response_code         = optional(number)
+    response_page_path    = optional(string)
+  }))
+
+  description = "List of Custom Error Response Element Objects for the distribution."
+  default     = [
+    # example value only, do not uncomment
+    #{
+    #  error_code         = 404
+    #  response_code      = 404
+    #  response_page_path = "/404.html"
+    #}
+  ]
+}
+
 variable "cloudfront_enabled" {
   type        = bool
   description = "Whether the distribution is enabled to accept end user requests for content."
