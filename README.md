@@ -39,6 +39,7 @@ For examples, see the [./examples](https://github.com/ksatirli/terraform-aws-clo
 | subdomain_name | The Subdomain Name of the Route53 Record. | `string` | n/a | yes |
 | alternate_subdomain_names | The Alternate (Sub)-Domain Names to provide to ACM and CloudFront. | `list(string)` | `[]` | no |
 | cloudfront_cache_policy | The Identifier for a Cache Policy. | `string` | `"Managed-CachingOptimized"` | no |
+| cloudfront_custom_error_responses | List of Custom Error Response Element Objects for the distribution. | <pre>list(object({<br>    error_caching_min_ttl = optional(number)<br>    error_code            = number<br>    response_code         = optional(number)<br>    response_page_path    = optional(string)<br>  }))</pre> | `[]` | no |
 | cloudfront_default_root_object | The object that you want CloudFront to return when an end user requests the root URL. | `string` | `"index.html"` | no |
 | cloudfront_enabled | Whether the distribution is enabled to accept end user requests for content. | `bool` | `true` | no |
 | cloudfront_http_version | The maximum HTTP version to support on the distribution. | `string` | `"http2and3"` | no |
